@@ -80,7 +80,7 @@ the items cited (Susskind &#38; Hrabovsky, 2014).</p>
 </div>
 ```
 Note that only actually cited items are included in the printed bibliography.
-For more extensive examples, have a look at the [./test/fixtures](test cases).
+For more extensive examples, have a look at the [test cases](test/fixtures).
 
 ## More features
 
