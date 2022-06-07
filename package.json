@@ -1,0 +1,35 @@
+{
+  "name": "@arothuis/markdown-it-biblatex",
+  "version": "0.1.0",
+  "description": "A markdown-it plug-in for rendering citations and a bibliography inside markdown",
+  "main": "src/index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "mocha --reporter-option maxDiffSize=0",
+    "test:cov": "nyc npm run test"
+  },
+  "mocha": {
+    "spec": "test/**.test.js"
+  },
+  "nyc": {
+    "reporter": [
+      "text",
+      "lcov",
+      "html"
+    ]
+  },
+  "author": "Alex Rothuis <alex.rothuis@gmail.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "chai": "^4.3.6",
+    "markdown-it": "^13.0.1",
+    "mocha": "^10.0.0",
+    "nyc": "^15.1.0"
+  },
+  "dependencies": {
+    "biblatex-csl-converter": "^2.0.4",
+    "citeproc": "^2.4.62"
+  }
+}
