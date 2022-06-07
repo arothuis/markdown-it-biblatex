@@ -168,38 +168,38 @@ Only `bibPath` is required.
 
 ```javascript
 {
-// Where to find the biblatex file (.bib)
-bibPath: null,
+    // Where to find the biblatex file (.bib)
+    bibPath: null,
 
-// Change locale for displaying references and bibliography (.xml)
-// See: https://github.com/citation-style-language/locales
-localePath: __dirname + "/csl/locales-en-US.xml",
+    // Change locale for displaying references and bibliography (.xml)
+    // See: https://github.com/citation-style-language/locales
+    localePath: __dirname + "/csl/locales-en-US.xml",
 
-// Change citation style for displaying references and bibliography (.csl)
-// See: https://github.com/citation-style-language/styles
-stylePath: __dirname + "/csl/apa-6th-edition.csl",
+    // Change citation style for displaying references and bibliography (.csl)
+    // See: https://github.com/citation-style-language/styles
+    stylePath: __dirname + "/csl/apa-6th-edition.csl",
 
-// Which mark to use for suppress-author (don't show author)
-suppressAuthorMark: "-",
+    // Which mark to use for suppress-author (don't show author)
+    suppressAuthorMark: "-",
 
-// Which mark to use for author-only (only show author)
-authorOnlyMark: "!",
+    // Which mark to use for author-only (only show author)
+    authorOnlyMark: "!",
 
-//Which mark to use for composite (inline text citation, i.e. without parentheses)
-compositeMark: "~",
+    //Which mark to use for composite (inline text citation, i.e. without parentheses)
+    compositeMark: "~",
 
-// Mark for placement of bibliography layout 
-// (choose carefully to prevent collissions with other tokens)
-bibliographyMark: "[bibliography]",
+    // Mark for placement of bibliography layout 
+    // (choose carefully to prevent collissions with other tokens)
+    bibliographyMark: "[bibliography]",
 
-// Replace bibliography title (h2)
-bibliographyTitle: "Bibliography",
+    // Replace bibliography title (h2)
+    bibliographyTitle: "Bibliography",
 
-// Replace bibliography title (h2) classes
-bibliographyTitleClasses: "bibliography-title",
+    // Replace bibliography title (h2) classes
+    bibliographyTitleClasses: "bibliography-title",
 
-// Wrap bibliography in a div
-wrapBibliography: true,
+    // Wrap bibliography in a div
+    wrapBibliography: true,
 };
 ```
 
