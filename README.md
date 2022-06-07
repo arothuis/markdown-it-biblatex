@@ -167,6 +167,7 @@ The following options can be passed to the plug-in (defaults shown).
 Only `bibPath` is required.
 
 ```javascript
+{
 // Where to find the biblatex file (.bib)
 bibPath: null,
 
@@ -199,6 +200,7 @@ bibliographyTitleClasses: "bibliography-title",
 
 // Wrap bibliography in a div
 wrapBibliography: true,
+};
 ```
 
 ## Custom rendering
