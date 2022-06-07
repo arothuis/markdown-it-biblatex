@@ -2,7 +2,17 @@
   "name": "@arothuis/markdown-it-biblatex",
   "version": "0.1.0",
   "description": "A markdown-it plug-in for rendering citations and a bibliography inside markdown",
+  "keywords": [
+    "markdown-it",
+    "markdown-it-plugin",
+    "bibliography",
+    "biblatex",
+    "citation"
+  ],
   "main": "src/index.js",
+  "files": [
+    "src"
+  ],
   "directories": {
     "test": "test"
   },
