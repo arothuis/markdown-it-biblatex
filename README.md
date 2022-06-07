@@ -1,4 +1,7 @@
 # @arothuis/markdown-it-biblatex
+
+[![Coverage Status](https://coveralls.io/repos/github/arothuis/markdown-it-biblatex/badge.svg?branch=main)](https://coveralls.io/github/arothuis/markdown-it-biblatex?branch=main)
+
 A [markdown-it](https://github.com/markdown-it/markdown-it) 
 plug-in for rendering citations 
 and a bibliography inside markdown.
