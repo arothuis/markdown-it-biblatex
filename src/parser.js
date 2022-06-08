@@ -46,7 +46,6 @@ function parser(context) {
         return processReference(state, match[0]);
     }
     
-    
     function processReference(state, ref, mode) {
         let infix = null;
 
