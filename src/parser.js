@@ -3,6 +3,7 @@ function parser(context) {
         suppressAuthorMark, 
         authorOnlyMark, 
         compositeMark,
+        infixMark,
         bibliographyMark,
     } = context.options;
 
@@ -45,8 +46,9 @@ function parser(context) {
         return processReference(state, match[0]);
     }
     
-    
     function processReference(state, ref, mode) {
+        let infix = null;
+
         const citationItems = ref
             .split(";")
             .map(rawItem => {
@@ -54,13 +56,23 @@ function parser(context) {
                 
                 const label = item.split("{")[0].split("#")[0].split("@")[1];
                 const findLocator = item.match(/(?<=#)(.+?)(?=({|$))/) || [];
-                const findPrefix = item.match(/(?<={)(.+?)(?=})/) || [];
+                const findAffixes = item.match(/(?<={)(.+?)(?=})/g) || [];
     
+                let prefix = findAffixes[0];
+                if (mode === "composite") {
+                    if (infix === null) {
+                        foundInfix = findAffixes.filter(i => i[0] === infixMark)[0];
+                        infix = (foundInfix || "").slice(1);
+                    }
+                    
+                    prefix = findAffixes.filter(i => i[0] !== infixMark[0])[0];
+                }
+
                 return {
                     label, 
                     id: context.bibData.ids[label], 
                     number: state.env.bib.refs.length, 
-                    prefix: findPrefix[0], 
+                    prefix, 
                     locator: findLocator[0],
                 };
             });
@@ -72,6 +84,7 @@ function parser(context) {
                 properties: {
                     noteIndex: 0,
                     mode,
+                    infix,
                 },
             }
         };
@@ -95,7 +108,7 @@ function parser(context) {
     
         state.push("biblatex_bibliography_open", "", 0);
         state.push("biblatex_bibliography_contents", "", 1);
-        state.push("biblatex_bibliography_close", 0);
+        state.push("biblatex_bibliography_close", "", 0);
     
         state.line++;
     

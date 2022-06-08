@@ -188,6 +188,9 @@ Only `bibPath` is required.
     //Which mark to use for composite (inline text citation, i.e. without parentheses)
     compositeMark: "~",
 
+    // Which mark to use to signify an infix text for composite citations
+    infixMark: "^",
+
     // Mark for placement of bibliography layout 
     // (choose carefully to prevent collissions with other tokens)
     bibliographyMark: "[bibliography]",
