@@ -17,7 +17,7 @@ function renderer(context) {
         }
 
         let rendered = "";
-        if (wrapBibliography) {
+        if (wrapBibliography === true) {
             rendered += '<div class="bibliography">\n';
         }
 

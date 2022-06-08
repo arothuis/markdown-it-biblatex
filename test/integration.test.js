@@ -48,6 +48,14 @@ describe("markdown-it plug-in", function () {
             const expected = fixture("no-items.html");
             expect(output).to.equal(expected);
         });
+
+        specify("infix for composite citations", function () {
+            const input = fixture("infix-composite.md");
+            const output = md.render(input);
+
+            const expected = fixture("infix-composite.html");
+            expect(output).to.equal(expected);
+        });
     });
 
     context("custom configuration", function () {
