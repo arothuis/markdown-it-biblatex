@@ -109,7 +109,7 @@ function parser(context) {
     
         state.push("biblatex_bibliography_open", "", 0);
         state.push("biblatex_bibliography_contents", "", 1);
-        state.push("biblatex_bibliography_close", 0);
+        state.push("biblatex_bibliography_close", "", 0);
     
         state.line++;
     
