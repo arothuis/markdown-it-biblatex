@@ -223,7 +223,8 @@ and the [markdown-it docs](https://github.com/markdown-it/markdown-it/blob/maste
 for more information.
 
 # Alternative projects
-This plug-in works similar yet different to 
-[markdown-it-bibliography](https://github.com/DerDrodt/markdown-it-bibliography).
+This plug-in works similar yet different to: 
+* [markdown-it-bibliography](https://github.com/DerDrodt/markdown-it-bibliography)
+* [markdown-it-cite](https://github.com/studyathome-internationally/markdown-it-plugins/tree/main/packages/markdown-it-cite)
 
-Their approach is very much the same, but it did not fit my needs.
+Their approaches are comparable, but did not fit my needs.
