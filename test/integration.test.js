@@ -23,6 +23,7 @@ describe("markdown-it plug-in", function () {
           ["bibliography does not get printed if no mark", "no-bibliography"],
           ["no cited items, no bibliography, despite mark", "no-items"],
           ["infix for composite citations", "infix-composite"],
+          ["each bibliography contains only references directly before it", "multiple-bibliographies"]
         ];
 
         examples.forEach(([specification, fixtureName]) => {

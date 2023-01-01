@@ -162,6 +162,11 @@ This outputs the following:
 <p>(Cohen, 1963; Susskind &#38; Hrabovsky, 2014).</p>
 ```
 
+## Caveats
+Since we support multiple bibliographies, ordering has become relevant:
+each bibliography only contains the references that came directly before it.
+This means that, currently, a bibliography cannot appear before the references.
+
 ## Configuration options
 The following options can be passed to the plug-in (defaults shown).
 Only `bibPath` is required.
