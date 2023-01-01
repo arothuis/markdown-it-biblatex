@@ -81,7 +81,7 @@ describe("markdown-it plug-in", function () {
         specify("custom mark for placing bibliography", function () {
             md.use(mdBiblatex, { 
                 bibPath: __dirname + "/fixtures/bibliography.bib",
-                bibliographyMark: "[bib-here]",
+                bibliographyMark: "<bib-here>",
             });
 
             const input = fixture("custom-bibliography-mark.md");

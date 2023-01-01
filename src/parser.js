@@ -98,10 +98,6 @@ function parser(context) {
     function bibliography(state, startLine, endLine, silent) {
         const start = state.bMarks[startLine] + state.tShift[startLine];
     
-        if (state.src[start] !== "[") {
-            return false;
-        }
-    
         if (state.src.slice(start, start + bibliographyMark.length) !== bibliographyMark) {
             return false;
         }
