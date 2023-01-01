@@ -15,79 +15,57 @@ const fixture = name => readFileSync(`${__dirname}/fixtures/${name}`, "utf-8");
 //  @TODO: Replace with snapshot testing when API stabilizes
 describe("markdown-it plug-in", function () {
     context("default configuration", function () {
-        md.use(mdBiblatex, { bibPath: `${__dirname}/fixtures/full-example.bib` });
+        md.use(mdBiblatex, { bibPath: `${__dirname}/fixtures/bibliography.bib` });
 
-        specify("extensive example (flaky)", function () {
-            const input = fixture("full-example.md");
+        const examples = [
+          ["a comprehensive example", "comprehensive"],
+          ["bibliography only contains cited items", "select-bibliography"],
+          ["bibliography does not get printed if no mark", "no-bibliography"],
+          ["no cited items, no bibliography, despite mark", "no-items"],
+          ["infix for composite citations", "infix-composite"],
+        ];
+
+        examples.forEach(([specification, fixtureName]) => {
+          specify(specification, function () {
+            const input = fixture(`${fixtureName}.md`);
             const output = md.render(input);
 
-            const expected = fixture("full-example.html");
+            const expected = fixture(`${fixtureName}.html`);
             expect(output).to.equal(expected);
-        });
-
-        specify("bibliography only contains cited items", function () {
-            const input = fixture("select-bibliography.md");
-            const output = md.render(input);
-
-            const expected = fixture("select-bibliography.html");
-            expect(output).to.equal(expected);
-        });
-
-        specify("bibliography does not get printed if not marked", function () {
-            const input = fixture("no-bibliography.md");
-            const output = md.render(input);
-
-            const expected = fixture("no-bibliography.html");
-            expect(output).to.equal(expected);
-        });
-
-        specify("no cited items, no bibliography, despite mark", function () {
-            const input = fixture("no-items.md");
-            const output = md.render(input);
-
-            const expected = fixture("no-items.html");
-            expect(output).to.equal(expected);
-        });
-
-        specify("infix for composite citations", function () {
-            const input = fixture("infix-composite.md");
-            const output = md.render(input);
-
-            const expected = fixture("infix-composite.html");
-            expect(output).to.equal(expected);
+          });
         });
     });
 
     context("custom configuration", function () {
         specify("custom citation style (via: github.com/citation-style-language/styles)", function () {
             md.use(mdBiblatex, { 
-                bibPath: __dirname + "/fixtures/full-example.bib",
+                bibPath: __dirname + "/fixtures/bibliography.bib",
                 stylePath: __dirname + "/fixtures/csl/chicago-author-date-16th-edition.csl",
             });
 
-            const input = fixture("full-example.md");
+            const input = fixture("comprehensive.md");
             const output = md.render(input);
             
-            const expected = fixture("full-example-chicago.html");
+            const expected = fixture("comprehensive-chicago.html");
             expect(output).to.equal(expected);
         });
 
         specify("custom locale (via: github.com/citation-style-language/locales)", function () {
             md.use(mdBiblatex, { 
-                bibPath: __dirname + "/fixtures/full-example.bib",
+                bibPath: __dirname + "/fixtures/bibliography.bib",
                 locale: __dirname + "/fixtures/csl/locales-nl-NL.xml",
             });
 
-            const input = fixture("full-example.md");
+            const input = fixture("comprehensive.md");
             const output = md.render(input);
             
-            const expected = fixture("full-example-nl-nl.html");
+            const expected = fixture("comprehensive-nl-nl.html");
             expect(output).to.equal(expected);
         });
         
         specify("custom marks for modes: composite, suppress-author, author-only", function () {
             md.use(mdBiblatex, { 
-                bibPath: __dirname + "/fixtures/full-example.bib",
+                bibPath: __dirname + "/fixtures/bibliography.bib",
                 compositeMark: "composite",
                 suppressAuthorMark: "suppress",
                 authorOnlyMark: "author-only",
@@ -102,7 +80,7 @@ describe("markdown-it plug-in", function () {
 
         specify("custom mark for placing bibliography", function () {
             md.use(mdBiblatex, { 
-                bibPath: __dirname + "/fixtures/full-example.bib",
+                bibPath: __dirname + "/fixtures/bibliography.bib",
                 bibliographyMark: "[bib-here]",
             });
 
@@ -115,7 +93,7 @@ describe("markdown-it plug-in", function () {
 
         specify("custom classes for bibliography title", function () {
             md.use(mdBiblatex, { 
-                bibPath: __dirname + "/fixtures/full-example.bib",
+                bibPath: __dirname + "/fixtures/bibliography.bib",
                 bibliographyTitleClasses: "sources",
             });
 
@@ -128,7 +106,7 @@ describe("markdown-it plug-in", function () {
 
         specify("custom bibliography title", function () {
             md.use(mdBiblatex, { 
-                bibPath: __dirname + "/fixtures/full-example.bib",
+                bibPath: __dirname + "/fixtures/bibliography.bib",
                 bibliographyTitle: "Sources",
             });
 
@@ -141,7 +119,7 @@ describe("markdown-it plug-in", function () {
 
         specify("no wrapping div for bibliography", function () {
             md.use(mdBiblatex, { 
-                bibPath: __dirname + "/fixtures/full-example.bib",
+                bibPath: __dirname + "/fixtures/bibliography.bib",
                 wrapBibliography: false,
             });
 
