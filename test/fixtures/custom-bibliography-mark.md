@@ -13,4 +13,4 @@ A citation with the author suppressed: [-@Susskind-Hrabovsky-2014]
 ### Author only
 A citation with the author only: [!@Susskind-Hrabovsky-2014]
 
-[bib-here]
+<bib-here>

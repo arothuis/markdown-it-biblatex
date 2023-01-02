@@ -7,12 +7,18 @@ function renderer(context) {
     } = context.options;
 
     function reference(tokens, idx, options, env, slf) {
+        if (env.bib.currentRefs === undefined) {
+          env.bib.currentRefs = [];
+        }
+
+        env.bib.currentRefs.push(tokens[idx].meta);
+
         const citation = citeproc.processCitationCluster(tokens[idx].meta.citation, [], []);
         return citation[1][0][1];
     }
 
     function bibliographyOpen(tokens, idx, options, env, slf) {
-        if (env.bib === undefined || env.bib.refs === undefined) {
+        if (env.bib === undefined || env.bib.currentRefs === undefined) {
             return "";
         }
 
@@ -27,12 +33,12 @@ function renderer(context) {
     }
 
     function bibliographyContents(tokens, idx, options, env, slf) {
-        if (env.bib === undefined || env.bib.refs === undefined) {
+        if (env.bib === undefined || env.bib.currentRefs === undefined) {
             return "";
         }
 
         const seen = [];
-        env.bib.refs.forEach(ref => {
+        env.bib.currentRefs.forEach(ref => {
             ref.citation.citationItems.forEach(item => {
                 seen.push(item.id);
             });
@@ -47,9 +53,11 @@ function renderer(context) {
     }
 
     function bibliographyClose(tokens, idx, options, env, slf) {
-        if (env.bib === undefined || env.bib.refs === undefined) {
+        if (env.bib === undefined || env.bib.currentRefs === undefined) {
             return "";
         }
+
+        env.bib.currentRefs = [];
 
         if (wrapBibliography) {
             return "</div>\n";
