@@ -208,6 +208,12 @@ Only `bibPath` is required.
 
     // Wrap bibliography in a div
     wrapBibliography: true,
+    
+    // Element that wraps bibliography contents
+    bibliographyContentsWrapper: "div",
+    
+    // Element that wraps bibliography entry
+    bibliographyEntryWrapper: "div"
 };
 ```
 
