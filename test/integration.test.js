@@ -130,6 +130,32 @@ describe("markdown-it plug-in", function () {
             const expected = fixture("select-bibliography-no-wrap.html");
             expect(output).to.equal(expected);
         });
+
+        specify("Custom wrapper for bibliography contents", function () {
+            md.use(mdBiblatex, { 
+                bibPath: __dirname + "/fixtures/bibliography.bib",
+                bibliographyContentsWrapper: "section"
+            });
+
+            const input = fixture("select-bibliography.md");
+            const output = md.render(input);
+
+            const expected = fixture("select-bibliography-custom-contents-wrapper.html");
+            expect(output).to.equal(expected);
+        });
+
+        specify("Custom wrapper for bibliography entry", function () {
+            md.use(mdBiblatex, { 
+                bibPath: __dirname + "/fixtures/bibliography.bib",
+                bibliographyEntryWrapper: "li"
+            });
+
+            const input = fixture("select-bibliography.md");
+            const output = md.render(input);
+
+            const expected = fixture("select-bibliography-custom-entry-wrapper.html");
+            expect(output).to.equal(expected);
+        });
     });
 
     context("configuration errors", function () {
