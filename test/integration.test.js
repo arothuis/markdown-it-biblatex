@@ -92,23 +92,10 @@ describe("markdown-it plug-in", function () {
             expect(output).to.equal(expected);
         });
 
-        specify("custom classes for bibliography title", function () {
+        specify("custom bibliography title element", function () {
             md.use(mdBiblatex, { 
                 bibPath: __dirname + "/fixtures/bibliography.bib",
-                bibliographyTitleClasses: "sources",
-            });
-
-            const input = fixture("select-bibliography.md");
-            const output = md.render(input);
-            
-            const expected = fixture("select-bibliography-custom-classes.html");
-            expect(output).to.equal(expected);
-        });
-
-        specify("custom bibliography title", function () {
-            md.use(mdBiblatex, { 
-                bibPath: __dirname + "/fixtures/bibliography.bib",
-                bibliographyTitle: "Sources",
+                bibliographyTitle: "<h1>References</h1>",
             });
 
             const input = fixture("select-bibliography.md");

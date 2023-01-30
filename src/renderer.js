@@ -2,7 +2,6 @@ function renderer(context) {
     const { citeproc } = context;
     const { 
         wrapBibliography, 
-        bibliographyTitleClasses, 
         bibliographyTitle,
         bibliographyContentsWrapper,
         bibliographyEntryWrapper,
@@ -29,7 +28,7 @@ function renderer(context) {
             rendered += '<div class="bibliography">\n';
         }
 
-        rendered += `<h2 class="${bibliographyTitleClasses}">${bibliographyTitle}</h2>\n`;
+        rendered += bibliographyTitle + "\n";
 
         return rendered;
     }
