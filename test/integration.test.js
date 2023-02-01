@@ -92,23 +92,10 @@ describe("markdown-it plug-in", function () {
             expect(output).to.equal(expected);
         });
 
-        specify("custom classes for bibliography title", function () {
+        specify("custom bibliography title element", function () {
             md.use(mdBiblatex, { 
                 bibPath: __dirname + "/fixtures/bibliography.bib",
-                bibliographyTitleClasses: "sources",
-            });
-
-            const input = fixture("select-bibliography.md");
-            const output = md.render(input);
-            
-            const expected = fixture("select-bibliography-custom-classes.html");
-            expect(output).to.equal(expected);
-        });
-
-        specify("custom bibliography title", function () {
-            md.use(mdBiblatex, { 
-                bibPath: __dirname + "/fixtures/bibliography.bib",
-                bibliographyTitle: "Sources",
+                bibliographyTitle: "<h1>References</h1>",
             });
 
             const input = fixture("select-bibliography.md");
@@ -128,6 +115,32 @@ describe("markdown-it plug-in", function () {
             const output = md.render(input);
 
             const expected = fixture("select-bibliography-no-wrap.html");
+            expect(output).to.equal(expected);
+        });
+
+        specify("Custom wrapper for bibliography contents", function () {
+            md.use(mdBiblatex, { 
+                bibPath: __dirname + "/fixtures/bibliography.bib",
+                bibliographyContentsWrapper: "section"
+            });
+
+            const input = fixture("select-bibliography.md");
+            const output = md.render(input);
+
+            const expected = fixture("select-bibliography-custom-contents-wrapper.html");
+            expect(output).to.equal(expected);
+        });
+
+        specify("Custom wrapper for bibliography entry", function () {
+            md.use(mdBiblatex, { 
+                bibPath: __dirname + "/fixtures/bibliography.bib",
+                bibliographyEntryWrapper: "li"
+            });
+
+            const input = fixture("select-bibliography.md");
+            const output = md.render(input);
+
+            const expected = fixture("select-bibliography-custom-entry-wrapper.html");
             expect(output).to.equal(expected);
         });
     });

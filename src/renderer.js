@@ -2,8 +2,9 @@ function renderer(context) {
     const { citeproc } = context;
     const { 
         wrapBibliography, 
-        bibliographyTitleClasses, 
-        bibliographyTitle 
+        bibliographyTitle,
+        bibliographyContentsWrapper,
+        bibliographyEntryWrapper,
     } = context.options;
 
     function reference(tokens, idx, options, env, slf) {
@@ -27,7 +28,7 @@ function renderer(context) {
             rendered += '<div class="bibliography">\n';
         }
 
-        rendered += `<h2 class="${bibliographyTitleClasses}">${bibliographyTitle}</h2>\n`;
+        rendered += bibliographyTitle + "\n";
 
         return rendered;
     }
@@ -47,9 +48,17 @@ function renderer(context) {
         citeproc.updateItems(seen);
         const [_, contents] = citeproc.makeBibliography();
 
-        return '<div class="bibliography-contents">\n' 
+        if (bibliographyEntryWrapper !== "div") {
+            contents.forEach((content, idx) => {
+                contents[idx] = content
+                                .replace("<div", "<" + bibliographyEntryWrapper)
+                                .replace("</div", "</" + bibliographyEntryWrapper)
+            })
+        }
+
+        return `<${bibliographyContentsWrapper} class="bibliography-contents">\n` 
             + contents.join("")
-            + '</div>\n';
+            + `</${bibliographyContentsWrapper}>\n`;
     }
 
     function bibliographyClose(tokens, idx, options, env, slf) {

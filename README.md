@@ -200,14 +200,17 @@ Only `bibPath` is required.
     // (choose carefully to prevent collissions with other tokens)
     bibliographyMark: "[bibliography]",
 
-    // Replace bibliography title (h2)
-    bibliographyTitle: "Bibliography",
-
-    // Replace bibliography title (h2) classes
-    bibliographyTitleClasses: "bibliography-title",
+    // Replace bibliography title element
+    bibliographyTitle: '<h2 class="bibliography-title">Bibliography</h2>',
 
     // Wrap bibliography in a div
     wrapBibliography: true,
+    
+    // Element that wraps bibliography contents
+    bibliographyContentsWrapper: "div",
+    
+    // Element that wraps bibliography entry
+    bibliographyEntryWrapper: "div"
 };
 ```
 
