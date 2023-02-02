@@ -38,9 +38,15 @@
   "license": "MIT",
   "devDependencies": {
     "chai": "^4.3.6",
+    "eslint": "^8.33.0",
+    "eslint-config-node": "^4.1.0",
+    "eslint-config-prettier": "^8.6.0",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-prettier": "^4.2.1",
     "markdown-it": "^13.0.1",
     "mocha": "^10.0.0",
-    "nyc": "^15.1.0"
+    "nyc": "^15.1.0",
+    "prettier": "^2.8.3"
   },
   "dependencies": {
     "biblatex-csl-converter": "^2.0.4",
