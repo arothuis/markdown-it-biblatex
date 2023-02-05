@@ -7,7 +7,7 @@ function renderer(context) {
     bibliographyEntryWrapper,
   } = context.options;
 
-  function reference(tokens, idx, options, env, slf) {
+  function reference(tokens, idx, options, env) {
     if (env.bib.currentRefs === undefined) {
       env.bib.currentRefs = [];
     }
@@ -18,7 +18,7 @@ function renderer(context) {
     return citation[1][0][1];
   }
 
-  function bibliographyOpen(tokens, idx, options, env, slf) {
+  function bibliographyOpen(tokens, idx, options, env) {
     if (env.bib === undefined || env.bib.currentRefs === undefined) {
       return '';
     }
@@ -28,12 +28,12 @@ function renderer(context) {
       rendered += '<div class="bibliography">\n';
     }
 
-    rendered += bibliographyTitle + '\n';
+    rendered += `${bibliographyTitle}\n`;
 
     return rendered;
   }
 
-  function bibliographyContents(tokens, idx, options, env, slf) {
+  function bibliographyContents(tokens, idx, options, env) {
     if (env.bib === undefined || env.bib.currentRefs === undefined) {
       return '';
     }
@@ -46,24 +46,22 @@ function renderer(context) {
     });
 
     citeproc.updateItems(seen);
-    const [_, contents] = citeproc.makeBibliography();
+    const contents = citeproc.makeBibliography()[1];
 
     if (bibliographyEntryWrapper !== 'div') {
-      contents.forEach((content, idx) => {
-        contents[idx] = content
-          .replace('<div', '<' + bibliographyEntryWrapper)
-          .replace('</div', '</' + bibliographyEntryWrapper);
+      contents.forEach((content, index) => {
+        contents[index] = content
+          .replace('<div', `<${bibliographyEntryWrapper}`)
+          .replace('</div', `</${bibliographyEntryWrapper}`);
       });
     }
 
-    return (
-      `<${bibliographyContentsWrapper} class="bibliography-contents">\n` +
-      contents.join('') +
-      `</${bibliographyContentsWrapper}>\n`
-    );
+    return `<${bibliographyContentsWrapper} class="bibliography-contents">\n${contents.join(
+      ''
+    )}</${bibliographyContentsWrapper}>\n`;
   }
 
-  function bibliographyClose(tokens, idx, options, env, slf) {
+  function bibliographyClose(tokens, idx, options, env) {
     if (env.bib === undefined || env.bib.currentRefs === undefined) {
       return '';
     }

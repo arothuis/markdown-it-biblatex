@@ -5,9 +5,9 @@ function parser(context) {
   const marks = [suppressAuthorMark, authorOnlyMark, compositeMark]
     .map((mark) => mark.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'))
     .join('|');
-  const validCitation = new RegExp(`(?<=^\\\[)((${marks})?@)(.+?)[^\](?=\])`);
+  const validCitation = new RegExp(`(?<=^\\[)((${marks})?@)(.+?)[^](?=])`);
 
-  function reference(state, silent) {
+  function reference(state) {
     const { pos, posMax, src } = state;
 
     if (state.env.bib === undefined) {
@@ -54,11 +54,11 @@ function parser(context) {
       let prefix = findAffixes[0];
       if (mode === 'composite') {
         if (infix === null) {
-          foundInfix = findAffixes.filter((i) => i[0] === infixMark)[0];
+          const [foundInfix] = findAffixes.filter((i) => i[0] === infixMark);
           infix = (foundInfix || '').slice(1);
         }
 
-        prefix = findAffixes.filter((i) => i[0] !== infixMark[0])[0];
+        [prefix] = findAffixes.filter((i) => i[0] !== infixMark[0]);
       }
 
       return {
@@ -88,7 +88,7 @@ function parser(context) {
     return true;
   }
 
-  function bibliography(state, startLine, endLine, silent) {
+  function bibliography(state, startLine) {
     const start = state.bMarks[startLine] + state.tShift[startLine];
 
     if (state.src.slice(start, start + bibliographyMark.length) !== bibliographyMark) {
@@ -99,7 +99,7 @@ function parser(context) {
     state.push('biblatex_bibliography_contents', '', 1);
     state.push('biblatex_bibliography_close', '', 0);
 
-    state.line++;
+    state.line += 1;
 
     return true;
   }
