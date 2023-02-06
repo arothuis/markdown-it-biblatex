@@ -1,4 +1,3 @@
-/* eslint-disable no-undef */
 const { expect } = require('chai');
 
 const markdownIt = require('markdown-it');
