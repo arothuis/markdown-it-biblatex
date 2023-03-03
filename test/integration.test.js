@@ -24,7 +24,6 @@ describe('markdown-it plug-in', () => {
       ['no cited items, no bibliography, despite mark', 'no-items'],
       ['infix for composite citations', 'infix-composite'],
       ['each bibliography contains only references directly before it', 'multiple-bibliographies'],
-      ['if there are no references, do not make a bibliography', 'no-refs-no-bibliography'],
     ];
 
     examples.forEach(([specification, fixtureName]) => {
@@ -160,5 +159,23 @@ describe('markdown-it plug-in', () => {
         'Could not parse'
       );
     });
+  });
+});
+
+context('decouple parsing and rendering', () => {
+  specify('guard against parsers that do not set env.bib', () => {
+    const customizedMd = markdownIt();
+    customizedMd.use(mdBiblatex, { bibPath: `${__dirname}/fixtures/bibliography.bib` });
+
+    // Wrap our renderer in a custom render function with undefined bib
+    const renderer = md.renderer.rules.biblatex_reference;
+    customizedMd.renderer.rules.biblatex_reference = (tokens, idx, options, env, slf) =>
+      renderer(tokens, idx, options, { ...env, bib: undefined }, slf);
+
+    const input = fixture('no-bibliography.md');
+    const output = customizedMd.render(input);
+
+    const expected = fixture('no-bibliography.html');
+    expect(output).to.equal(expected);
   });
 });

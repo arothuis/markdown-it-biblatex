@@ -8,6 +8,7 @@ function renderer(context) {
   } = context.options;
 
   function reference(tokens, idx, options, env) {
+    // Sanity check for when a different parser is being used
     if (env.bib === undefined) {
       env.bib = {};
     }
