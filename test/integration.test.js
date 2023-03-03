@@ -162,3 +162,21 @@ describe('markdown-it plug-in', () => {
     });
   });
 });
+
+context('decouple parsing and rendering', () => {
+  specify('guard against parsers that do not set env.bib', () => {
+    const customizedMd = markdownIt();
+    customizedMd.use(mdBiblatex, { bibPath: `${__dirname}/fixtures/bibliography.bib` });
+
+    // Wrap our renderer in a custom render function with undefined bib
+    const renderer = md.renderer.rules.biblatex_reference;
+    customizedMd.renderer.rules.biblatex_reference = (tokens, idx, options, env, slf) =>
+      renderer(tokens, idx, options, { ...env, bib: undefined }, slf);
+
+    const input = fixture('no-bibliography.md');
+    const output = customizedMd.render(input);
+
+    const expected = fixture('no-bibliography.html');
+    expect(output).to.equal(expected);
+  });
+});
