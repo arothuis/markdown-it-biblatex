@@ -11,7 +11,7 @@ function renderer(context) {
     if (env.bib === undefined) {
       env.bib = {};
     }
-    
+
     if (env.bib.currentRefs === undefined) {
       env.bib.currentRefs = [];
     }
