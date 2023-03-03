@@ -8,6 +8,10 @@ function renderer(context) {
   } = context.options;
 
   function reference(tokens, idx, options, env) {
+    if (env.bib === undefined) {
+      env.bib = {};
+    }
+
     if (env.bib.currentRefs === undefined) {
       env.bib.currentRefs = [];
     }
