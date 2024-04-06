@@ -73,7 +73,7 @@ function renderer(context) {
 
     env.bib.currentRefs = [];
 
-    if (wrapBibliography) {
+    if (wrapBibliography === true) {
       return '</div>\n';
     }
 

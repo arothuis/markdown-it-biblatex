@@ -118,7 +118,7 @@ describe('markdown-it plug-in', () => {
       expect(output).to.equal(expected);
     });
 
-    specify('Custom wrapper for bibliography contents', () => {
+    specify('custom wrapper for bibliography contents', () => {
       md.use(mdBiblatex, {
         bibPath: `${__dirname}/fixtures/bibliography.bib`,
         bibliographyContentsWrapper: 'section',
@@ -131,7 +131,7 @@ describe('markdown-it plug-in', () => {
       expect(output).to.equal(expected);
     });
 
-    specify('Custom wrapper for bibliography entry', () => {
+    specify('custom wrapper for bibliography entry', () => {
       md.use(mdBiblatex, {
         bibPath: `${__dirname}/fixtures/bibliography.bib`,
         bibliographyEntryWrapper: 'li',
