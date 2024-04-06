@@ -118,6 +118,19 @@ describe('markdown-it plug-in', () => {
       expect(output).to.equal(expected);
     });
 
+    specify('linked bibliography items', () => {
+      md.use(mdBiblatex, {
+        bibPath: `${__dirname}/fixtures/bibliography.bib`,
+        linkToBibliography: true,
+      });
+
+      const input = fixture('linked-bibliography.md');
+      const output = md.render(input);
+
+      const expected = fixture('linked-bibliography.html');
+      expect(output).to.equal(expected);
+    });
+
     specify('custom wrapper for bibliography contents', () => {
       md.use(mdBiblatex, {
         bibPath: `${__dirname}/fixtures/bibliography.bib`,

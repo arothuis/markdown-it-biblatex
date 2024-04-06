@@ -5,6 +5,7 @@ function renderer(context) {
     bibliographyTitle,
     bibliographyContentsWrapper,
     bibliographyEntryWrapper,
+    linkToBibliography,
   } = context.options;
 
   function reference(tokens, idx, options, env) {
@@ -17,10 +18,22 @@ function renderer(context) {
       env.bib.currentRefs = [];
     }
 
+    if (env.bib.counter === undefined) {
+      env.bib.counter = 1;
+    }
+
     env.bib.currentRefs.push(tokens[idx].meta);
 
-    const citation = citeproc.processCitationCluster(tokens[idx].meta.citation, [], []);
-    return citation[1][0][1];
+    const citationCluster = citeproc.processCitationCluster(tokens[idx].meta.citation, [], []);
+    const citeId = `cite-${env.bib.counter}-${tokens[idx].meta.citation.citationItems[0].number}`;
+    const bibRef = `${env.bib.counter}-${tokens[idx].meta.citation.citationItems[0].id}`;
+
+    let citation = `<span id="${citeId}" class="citation">${citationCluster[1][0][1]}</span>`;
+    if (linkToBibliography === true) {
+      citation = `<a href="#bib-${bibRef}">${citation}</a>`;
+    }
+
+    return citation;
   }
 
   function bibliographyOpen(tokens, idx, options, env) {
@@ -50,16 +63,17 @@ function renderer(context) {
       });
     });
 
-    citeproc.updateItems(seen);
-    const contents = citeproc.makeBibliography()[1];
+    const bibIds = citeproc.updateItems(seen);
+    const contents = citeproc.makeBibliography()[1].map((entry, i) => {
+      entry = entry.replace('<div', `<div id="bib-${env.bib.counter}-${bibIds[i]}"`);
 
-    if (bibliographyEntryWrapper !== 'div') {
-      contents.forEach((content, index) => {
-        contents[index] = content
-          .replace('<div', `<${bibliographyEntryWrapper}`)
-          .replace('</div', `</${bibliographyEntryWrapper}`);
-      });
-    }
+      if (bibliographyEntryWrapper !== 'div') {
+        entry = entry.replace('<div', `<${bibliographyEntryWrapper}`);
+        entry = entry.replace('</div', `</${bibliographyEntryWrapper}`);
+      }
+
+      return entry;
+    });
 
     return `<${bibliographyContentsWrapper} class="bibliography-contents">\n${contents.join(
       ''
@@ -72,6 +86,7 @@ function renderer(context) {
     }
 
     env.bib.currentRefs = [];
+    env.bib.counter += 1;
 
     if (wrapBibliography === true) {
       return '</div>\n';
