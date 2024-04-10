@@ -74,17 +74,17 @@ It produces the following HTML thanks to the power of
 
 ```html
 <p>
-  A bibliography (Cohen, 1963) is only produced for the items cited (Susskind &#38; Hrabovsky,
-  2014).
+  A bibliography <span id="cite-1-0" class="citation">(Cohen, 1963)</span> is only produced for the
+  items cited <span id="cite-1-1" class="citation">(Susskind &#38; Hrabovsky, 2014)</span>.
 </p>
 <div class="bibliography">
   <h2 class="bibliography-title">Bibliography</h2>
   <div class="bibliography-contents">
-    <div class="csl-entry">
+    <div id="bib-1-1" class="csl-entry">
       Cohen, P. J. (1963). The independence of the continuum hypothesis.
       <i>Proceedings of the National Academy of Sciences</i>, <i>50</i>(6), 1143–1148.
     </div>
-    <div class="csl-entry">
+    <div id="bib-1-2" class="csl-entry">
       Susskind, L., &#38; Hrabovsky, G. (2014). <i>Classical mechanics: the theoretical minimum</i>.
       New York, NY: Penguin Random House.
     </div>
@@ -109,7 +109,9 @@ by wrapping it in curly braces:
 Results in:
 
 ```html
-<p>(see Cohen, 1963)</p>
+<p>
+  <span id="cite-1-0" class="citation">(see Cohen, 1963)</span>
+</p>
 ```
 
 ### Locator
@@ -126,8 +128,12 @@ citation, you can use the locator mark (`#`):
 Result:
 
 ```html
-<p>(Cohen, 1963, p. 3)</p>
-<p>(see Cohen, 1963, p. 3)</p>
+<p>
+  <span id="cite-1-0" class="citation">(Cohen, 1963, p. 3)</span>
+</p>
+<p>
+  <span id="cite-1-0" class="citation">(see Cohen, 1963, p. 3)</span>
+</p>
 ```
 
 ### Different citation modes
@@ -166,13 +172,13 @@ citations using an en-US locale and the APA style:
 
 ```html
 <h3>Regular</h3>
-<p>A regular citation: (Cohen, 1963)</p>
+<p>A regular citation: <span id="cite-1-0" class="citation">(Cohen, 1963)</span></p>
 <h3>Author only</h3>
-<p>A citation with the author only: Cohen</p>
+<p>A citation with the author only: <span id="cite-1-1" class="citation">Cohen</span></p>
 <h3>Suppress author</h3>
-<p>A citation with the author suppressed: (1963)</p>
+<p>A citation with the author suppressed: <span id="cite-1-2" class="citation">(1963)</span></p>
 <h3>Composite</h3>
-<p>A composite citation: Cohen (1963)</p>
+<p>A composite citation: <span id="cite-1-3" class="citation">Cohen (1963)</span></p>
 ```
 
 ### Multiple items in a single citation
@@ -187,14 +193,90 @@ citation, by using a semicolon (`;`):
 This outputs the following:
 
 ```html
-<p>(Cohen, 1963; Susskind &#38; Hrabovsky, 2014).</p>
+<p>
+  <span id="cite-1-0" class="citation">(Cohen, 1963; Susskind &#38; Hrabovsky, 2014).</span>
+</p>
+```
+
+### Anchor tags
+
+To add anchor tags between a citation and a bibliography item,
+set the `linkToBibliography` option to true.
+
+This will turn the following:
+
+```md
+A bibliography [@Cohen-1963] is only produced for
+the items cited [@Susskind-Hrabovsky-2014].
+
+For multiple items in a citation, only the first is linked
+[@Holleis-Wagner-Koolwaaij-2010; @Shapiro-2018].
+
+[bibliography]
+```
+
+Into this:
+
+```html
+<p>
+  A bibliography <a href="#bib-1-1"><span id="cite-1-0" class="citation">(Cohen, 1963)</span></a> is
+  only produced for the items cited
+  <a href="#bib-1-2"><span id="cite-1-1" class="citation">(Susskind &#38; Hrabovsky, 2014)</span></a
+  >.
+</p>
+<p>
+  For multiple items in a citation, only the first is linked
+  <a href="#bib-1-6"
+    ><span id="cite-1-2" class="citation"
+      >(Holleis, Wagner, &#38; Koolwaaij, 2010; Shapiro, 2018)</span
+    ></a
+  >.
+</p>
+<div class="bibliography">
+  <h2 class="bibliography-title">Bibliography</h2>
+  <div class="bibliography-contents">
+    <div id="bib-1-1" class="csl-entry">
+      Cohen, P. J. (1963). The independence of the continuum hypothesis.
+      <i>Proceedings of the National Academy of Sciences</i>, <i>50</i>(6), 1143–1148.
+    </div>
+    <div id="bib-1-6" class="csl-entry">
+      Holleis, P., Wagner, M., &#38; Koolwaaij, J. (2010). Studying mobile context-aware social
+      services in the wild. <i>Proc. of the 6th Nordic Conf. on Human-Computer Interaction</i>,
+      207–216. New York, NY: ACM.
+    </div>
+    <div id="bib-1-5" class="csl-entry">
+      Shapiro, H. M. (2018). Flow Cytometry: The Glass Is Half Full. In T. S. Hawley &#38; R. G.
+      Hawley (Eds.), <i>Flow Cytometry Protocols</i> (pp. 1–10). New York, NY: Springer.
+    </div>
+    <div id="bib-1-2" class="csl-entry">
+      Susskind, L., &#38; Hrabovsky, G. (2014). <i>Classical mechanics: the theoretical minimum</i>.
+      New York, NY: Penguin Random House.
+    </div>
+  </div>
+</div>
 ```
 
 ## Caveats
 
+### Multiple bibliographies: ordering
+
 Since we support multiple bibliographies, ordering has become relevant:
 each bibliography only contains the references that came directly before it.
 This means that, currently, a bibliography cannot appear before the references.
+
+### Multiple items in a single citation: citation modes unsupported
+
+Using a citation mode in combination when citing multiple items in a single citation
+is currently not supported.
+
+### Multiple items in a single citations: only first item is linked
+
+When using anchor tags to link citation and bibliography item,
+and there are multiple items in a single citation,
+the first item you name is always used.
+This is due to how the underlying library processes and parses citation clusters.
+Do note that "the first item you name" is not necessarily the first one that will be rendered
+some citation styles change the ordering.
 
 ## Configuration options
 
@@ -241,6 +323,9 @@ Only `bibPath` is required.
 
     // Element that wraps bibliography entry
     bibliographyEntryWrapper: "div"
+
+    // Whether or not to add anchor tags from citations to bibliography items
+    linkToBibliography: true,
 };
 ```
 

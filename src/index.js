@@ -44,6 +44,9 @@ const DEFAULT_OPTIONS = {
 
   // Element that wraps bibliography entry
   bibliographyEntryWrapper: 'div',
+
+  // Whether or not to add anchor tags from citations to bibliography items
+  linkToBibliography: false,
 };
 
 function mdBibLatexPlugin(md, _options) {
