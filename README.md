@@ -264,12 +264,19 @@ Since we support multiple bibliographies, ordering has become relevant:
 each bibliography only contains the references that came directly before it.
 This means that, currently, a bibliography cannot appear before the references.
 
+### Multiple items in a single citation: citation modes unsupported
+
+Using a citation mode in combination when citing multiple items in a single citation
+is currently not supported.
+
 ### Multiple items in a single citations: only first item is linked
 
 When using anchor tags to link citation and bibliography item,
 and there are multiple items in a single citation,
-the first item is always picked. This is due to how
-the underlying library processes and parses citation clusters.
+the first item you name is always used.
+This is due to how the underlying library processes and parses citation clusters.
+Do note that "the first item you name" is not necessarily the first one that will be rendered
+some citation styles change the ordering.
 
 ## Configuration options
 
