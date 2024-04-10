@@ -322,7 +322,7 @@ Only `bibPath` is required.
     bibliographyContentsWrapper: "div",
 
     // Element that wraps bibliography entry
-    bibliographyEntryWrapper: "div"
+    bibliographyEntryWrapper: "div",
 
     // Whether or not to add anchor tags from citations to bibliography items
     linkToBibliography: true,
