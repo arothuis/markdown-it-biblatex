@@ -181,7 +181,7 @@ context('decouple parsing and rendering', () => {
     customizedMd.use(mdBiblatex, { bibPath: `${__dirname}/fixtures/bibliography.bib` });
 
     // Wrap our renderer in a custom render function with undefined bib
-    const renderer = md.renderer.rules.biblatex_reference;
+    const renderer = customizedMd.renderer.rules.biblatex_reference;
     customizedMd.renderer.rules.biblatex_reference = (tokens, idx, options, env, slf) =>
       renderer(tokens, idx, options, { ...env, bib: undefined }, slf);
 
