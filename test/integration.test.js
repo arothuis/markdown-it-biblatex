@@ -173,6 +173,29 @@ describe('markdown-it plug-in', () => {
 
       unlinkSync(`${__dirname}/fixtures/temp.bib`);
     });
+
+    specify('always reload files when rerunning the render function', () => {
+      const sources = readFileSync(`${__dirname}/fixtures/bibliography.bib`, 'utf8').split('\n\n');
+      writeFileSync(`${__dirname}/fixtures/temp.bib`, sources.slice(0, 2).join('\n\n'));
+
+      md.use(mdBiblatex, {
+        bibPath: `${__dirname}/fixtures/temp.bib`,
+        alwaysReloadFiles: true,
+        allowMissingRefs: true,
+      });
+      const input = fixture('select-bibliography.md');
+      const expectedEventually = fixture('select-bibliography.html');
+
+      const outputWithMissingRefs = md.render(input);
+      expect(outputWithMissingRefs).to.not.equal(expectedEventually);
+
+      writeFileSync(`${__dirname}/fixtures/temp.bib`, sources.slice(0, 3).join('\n\n'));
+
+      const outputWithAllRefs = md.render(input);
+      expect(outputWithAllRefs).to.equal(expectedEventually);
+
+      unlinkSync(`${__dirname}/fixtures/temp.bib`);
+    });
   });
 
   context('configuration errors', () => {

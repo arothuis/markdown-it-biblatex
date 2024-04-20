@@ -1,5 +1,4 @@
 function renderer(context) {
-  const { citeproc } = context;
   const {
     wrapBibliography,
     bibliographyTitle,
@@ -25,7 +24,7 @@ function renderer(context) {
 
     let citationCluster;
     try {
-      citationCluster = citeproc.processCitationCluster(tokens[idx].meta.citation, [], []);
+      citationCluster = context.citeproc.processCitationCluster(tokens[idx].meta.citation, [], []);
     } catch (e) {
       if (allowMissingRefs === true) {
         return tokens[idx].meta.ref;
@@ -74,8 +73,8 @@ function renderer(context) {
       });
     });
 
-    const bibIds = citeproc.updateItems(seen);
-    const contents = citeproc.makeBibliography()[1].map((entry, i) => {
+    const bibIds = context.citeproc.updateItems(seen);
+    const contents = context.citeproc.makeBibliography()[1].map((entry, i) => {
       entry = entry.replace('<div', `<div id="bib-${env.bib.counter}-${bibIds[i]}"`);
 
       if (bibliographyEntryWrapper !== 'div') {
