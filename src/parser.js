@@ -91,7 +91,9 @@ function parser(context) {
   function bibliography(state, startLine) {
     const start = state.bMarks[startLine] + state.tShift[startLine];
 
-    if (state.src.slice(start, start + bibliographyMark.length) !== bibliographyMark) {
+    const foundMark = state.src.slice(start, start + bibliographyMark.length) === bibliographyMark;
+
+    if (!foundMark) {
       return false;
     }
 
@@ -104,9 +106,22 @@ function parser(context) {
     return true;
   }
 
+  function appendBibliography(state) {
+    if (state.pos !== state.posMax) {
+      return false;
+    }
+
+    state.tokens.push(new state.Token('biblatex_bibliography_open', '', 0));
+    state.tokens.push(new state.Token('biblatex_bibliography_contents', '', 1));
+    state.tokens.push(new state.Token('biblatex_bibliography_close', '', 0));
+
+    return true;
+  }
+
   return {
     reference,
     bibliography,
+    appendBibliography,
   };
 }
 

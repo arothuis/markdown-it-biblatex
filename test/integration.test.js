@@ -156,6 +156,19 @@ describe('markdown-it plug-in', () => {
       const expected = fixture('select-bibliography-custom-entry-wrapper.html');
       expect(output).to.equal(expected);
     });
+
+    specify('append bibliography at the end of content if so configured', () => {
+      md.use(mdBiblatex, {
+        bibPath: `${__dirname}/fixtures/bibliography.bib`,
+        appendBibliography: true,
+      });
+
+      const input = fixture('append-bibliography.md');
+      const output = md.render(input);
+
+      const expected = fixture('select-bibliography.html');
+      expect(output).to.equal(expected);
+    });
   });
 
   context('configuration errors', () => {

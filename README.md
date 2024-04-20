@@ -326,6 +326,9 @@ Only `bibPath` is required.
 
     // Whether or not to add anchor tags from citations to bibliography items
     linkToBibliography: true,
+
+    // Whether or not to always append a bibliography at the end of a file
+    appendBibliography: false,
 };
 ```
 
