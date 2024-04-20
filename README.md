@@ -296,6 +296,9 @@ Only `bibPath` is required.
     // See: https://github.com/citation-style-language/styles
     stylePath: __dirname + "/csl/apa-6th-edition.csl",
 
+    // Don't throw errors if references are missing
+    allowMissingRefs: false,
+
     // Which mark to use for suppress-author (don't show author)
     suppressAuthorMark: "-",
 

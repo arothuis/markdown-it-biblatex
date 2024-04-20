@@ -72,6 +72,7 @@ function parser(context) {
 
     const token = state.push('biblatex_reference', '', 0);
     token.meta = {
+      ref: `[${ref}]`,
       citation: {
         citationItems,
         properties: {

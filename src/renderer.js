@@ -6,6 +6,7 @@ function renderer(context) {
     bibliographyContentsWrapper,
     bibliographyEntryWrapper,
     linkToBibliography,
+    allowMissingRefs,
   } = context.options;
 
   function reference(tokens, idx, options, env) {
@@ -22,9 +23,19 @@ function renderer(context) {
       env.bib.counter = 1;
     }
 
+    let citationCluster;
+    try {
+      citationCluster = citeproc.processCitationCluster(tokens[idx].meta.citation, [], []);
+    } catch (e) {
+      if (allowMissingRefs === true) {
+        return tokens[idx].meta.ref;
+      }
+
+      throw e;
+    }
+
     env.bib.currentRefs.push(tokens[idx].meta);
 
-    const citationCluster = citeproc.processCitationCluster(tokens[idx].meta.citation, [], []);
     const citeId = `cite-${env.bib.counter}-${tokens[idx].meta.citation.citationItems[0].number}`;
     const bibRef = `${env.bib.counter}-${tokens[idx].meta.citation.citationItems[0].id}`;
 

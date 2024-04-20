@@ -1,7 +1,7 @@
 const { expect } = require('chai');
 
 const markdownIt = require('markdown-it');
-const { readFileSync } = require('fs');
+const { readFileSync, writeFileSync, unlinkSync } = require('fs');
 const mdBiblatex = require('../src');
 
 const md = markdownIt();
@@ -155,6 +155,23 @@ describe('markdown-it plug-in', () => {
 
       const expected = fixture('select-bibliography-custom-entry-wrapper.html');
       expect(output).to.equal(expected);
+    });
+
+    specify('suppress errors when a reference is missing', () => {
+      writeFileSync(`${__dirname}/fixtures/temp.bib`, '');
+
+      md.use(mdBiblatex, {
+        bibPath: `${__dirname}/fixtures/temp.bib`,
+        allowMissingRefs: true,
+      });
+
+      const input = fixture('select-bibliography.md');
+      const expected = fixture('select-bibliography-missing-refs.html');
+      const output = md.render(input);
+
+      expect(output).to.equal(expected);
+
+      unlinkSync(`${__dirname}/fixtures/temp.bib`);
     });
   });
 
