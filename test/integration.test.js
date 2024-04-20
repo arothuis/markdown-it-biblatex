@@ -157,11 +157,18 @@ describe('markdown-it plug-in', () => {
       expect(output).to.equal(expected);
     });
 
-    specify('suppress errors when a reference is missing', () => {
-      writeFileSync(`${__dirname}/fixtures/temp.bib`, '');
-
+    specify('error when a reference is missing', () => {
       md.use(mdBiblatex, {
-        bibPath: `${__dirname}/fixtures/temp.bib`,
+        bibPath: `${__dirname}/fixtures/empty.bib`,
+      });
+      const input = fixture('select-bibliography.md');
+
+      expect(() => md.render(input)).to.throw('Reference not found');
+    });
+
+    specify('suppress errors when a reference is missing if so configured', () => {
+      md.use(mdBiblatex, {
+        bibPath: `${__dirname}/fixtures/empty.bib`,
         allowMissingRefs: true,
       });
 
@@ -170,8 +177,6 @@ describe('markdown-it plug-in', () => {
       const output = md.render(input);
 
       expect(output).to.equal(expected);
-
-      unlinkSync(`${__dirname}/fixtures/temp.bib`);
     });
 
     specify('always reload files when rerunning the render function', () => {

@@ -25,12 +25,12 @@ function renderer(context) {
     let citationCluster;
     try {
       citationCluster = context.citeproc.processCitationCluster(tokens[idx].meta.citation, [], []);
-    } catch (e) {
+    } catch (err) {
       if (allowMissingRefs === true) {
         return tokens[idx].meta.ref;
       }
 
-      throw e;
+      throw new Error(`Reference not found '${tokens[idx].meta.ref}': ${err}`);
     }
 
     env.bib.currentRefs.push(tokens[idx].meta);
