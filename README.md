@@ -296,6 +296,14 @@ Only `bibPath` is required.
     // See: https://github.com/citation-style-language/styles
     stylePath: __dirname + "/csl/apa-6th-edition.csl",
 
+    // Reload bib, locale and styles on every render
+    // This could be a useful option when working with a live updating plugin,
+    // at the cost of performance
+    alwaysReloadFiles: false,
+
+    // Don't throw errors if references are missing
+    allowMissingRefs: false,
+
     // Which mark to use for suppress-author (don't show author)
     suppressAuthorMark: "-",
 

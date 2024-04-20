@@ -1,11 +1,11 @@
 function renderer(context) {
-  const { citeproc } = context;
   const {
     wrapBibliography,
     bibliographyTitle,
     bibliographyContentsWrapper,
     bibliographyEntryWrapper,
     linkToBibliography,
+    allowMissingRefs,
   } = context.options;
 
   function reference(tokens, idx, options, env) {
@@ -22,9 +22,19 @@ function renderer(context) {
       env.bib.counter = 1;
     }
 
+    let citationCluster;
+    try {
+      citationCluster = context.citeproc.processCitationCluster(tokens[idx].meta.citation, [], []);
+    } catch (err) {
+      if (allowMissingRefs === true) {
+        return tokens[idx].meta.ref;
+      }
+
+      throw new Error(`Reference not found '${tokens[idx].meta.ref}': ${err}`);
+    }
+
     env.bib.currentRefs.push(tokens[idx].meta);
 
-    const citationCluster = citeproc.processCitationCluster(tokens[idx].meta.citation, [], []);
     const citeId = `cite-${env.bib.counter}-${tokens[idx].meta.citation.citationItems[0].number}`;
     const bibRef = `${env.bib.counter}-${tokens[idx].meta.citation.citationItems[0].id}`;
 
@@ -63,8 +73,8 @@ function renderer(context) {
       });
     });
 
-    const bibIds = citeproc.updateItems(seen);
-    const contents = citeproc.makeBibliography()[1].map((entry, i) => {
+    const bibIds = context.citeproc.updateItems(seen);
+    const contents = context.citeproc.makeBibliography()[1].map((entry, i) => {
       entry = entry.replace('<div', `<div id="bib-${env.bib.counter}-${bibIds[i]}"`);
 
       if (bibliographyEntryWrapper !== 'div') {
