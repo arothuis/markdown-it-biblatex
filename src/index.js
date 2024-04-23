@@ -47,6 +47,10 @@ const DEFAULT_OPTIONS = {
 
   // Whether or not to add anchor tags from citations to bibliography items
   linkToBibliography: false,
+
+  // Whether or not to always append a bibliography at the end of a file
+  // Note: the order in which you add this plugin in relation to others may matter!
+  appendBibliography: false,
 };
 
 function mdBibLatexPlugin(md, _options) {
@@ -64,6 +68,10 @@ function mdBibLatexPlugin(md, _options) {
   md.block.ruler.after('reference', 'biblatex_bibliography', parse.bibliography, {
     alt: ['paragraph', 'reference'],
   });
+
+  if (options.appendBibliography) {
+    md.core.ruler.push('biblatex_append_bibliography', parse.appendBibliography);
+  }
 
   // Rendering
   md.renderer.rules.biblatex_reference = render.reference;
