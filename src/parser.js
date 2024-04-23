@@ -107,10 +107,6 @@ function parser(context) {
   }
 
   function appendBibliography(state) {
-    if (state.pos !== state.posMax) {
-      return false;
-    }
-
     state.tokens.push(new state.Token('biblatex_bibliography_open', '', 0));
     state.tokens.push(new state.Token('biblatex_bibliography_contents', '', 1));
     state.tokens.push(new state.Token('biblatex_bibliography_close', '', 0));

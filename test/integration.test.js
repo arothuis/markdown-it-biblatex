@@ -166,7 +166,7 @@ describe('markdown-it plug-in', () => {
       const input = fixture('append-bibliography.md');
       const output = md.render(input);
 
-      const expected = fixture('select-bibliography.html');
+      const expected = fixture('append-bibliography.html');
       expect(output).to.equal(expected);
     });
   });

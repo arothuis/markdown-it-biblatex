@@ -328,6 +328,7 @@ Only `bibPath` is required.
     linkToBibliography: true,
 
     // Whether or not to always append a bibliography at the end of a file
+    // Note: the order in which you add this plugin in relation to others may matter!
     appendBibliography: false,
 };
 ```
