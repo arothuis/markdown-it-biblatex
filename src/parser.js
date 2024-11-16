@@ -1,6 +1,12 @@
 function parser(context) {
-  const { suppressAuthorMark, authorOnlyMark, compositeMark, infixMark, bibliographyMark } =
-    context.options;
+  const {
+    suppressAuthorMark,
+    authorOnlyMark,
+    compositeMark,
+    infixMark,
+    bibliographyMark,
+    alwaysReloadFiles,
+  } = context.options;
 
   const marks = [suppressAuthorMark, authorOnlyMark, compositeMark]
     .map((mark) => mark.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'))
@@ -11,6 +17,12 @@ function parser(context) {
     const { pos, posMax, src } = state;
 
     if (state.env.bib === undefined) {
+      if (alwaysReloadFiles === true) {
+        const { bibData, citeproc } = context.loadFiles(context.options);
+        context.bibData = bibData;
+        context.citeproc = citeproc;
+      }
+
       state.env.bib = {
         refs: [],
       };
@@ -72,6 +84,7 @@ function parser(context) {
 
     const token = state.push('biblatex_reference', '', 0);
     token.meta = {
+      ref: `[${ref}]`,
       citation: {
         citationItems,
         properties: {

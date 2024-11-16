@@ -1,7 +1,7 @@
 const { expect } = require('chai');
 
 const markdownIt = require('markdown-it');
-const { readFileSync } = require('fs');
+const { readFileSync, writeFileSync, unlinkSync } = require('fs');
 const mdBiblatex = require('../src');
 
 const md = markdownIt();
@@ -157,6 +157,51 @@ describe('markdown-it plug-in', () => {
       expect(output).to.equal(expected);
     });
 
+    specify('error when a reference is missing', () => {
+      md.use(mdBiblatex, {
+        bibPath: `${__dirname}/fixtures/empty.bib`,
+      });
+      const input = fixture('select-bibliography.md');
+
+      expect(() => md.render(input)).to.throw('Reference not found');
+    });
+
+    specify('suppress errors when a reference is missing if so configured', () => {
+      md.use(mdBiblatex, {
+        bibPath: `${__dirname}/fixtures/empty.bib`,
+        allowMissingRefs: true,
+      });
+
+      const input = fixture('select-bibliography.md');
+      const expected = fixture('select-bibliography-missing-refs.html');
+      const output = md.render(input);
+
+      expect(output).to.equal(expected);
+    });
+
+    specify('always reload files when rerunning the render function', () => {
+      const sources = readFileSync(`${__dirname}/fixtures/bibliography.bib`, 'utf8').split('\n\n');
+      writeFileSync(`${__dirname}/fixtures/temp.bib`, sources.slice(0, 2).join('\n\n'));
+
+      md.use(mdBiblatex, {
+        bibPath: `${__dirname}/fixtures/temp.bib`,
+        alwaysReloadFiles: true,
+        allowMissingRefs: true,
+      });
+      const input = fixture('select-bibliography.md');
+      const expectedEventually = fixture('select-bibliography.html');
+
+      const outputWithMissingRefs = md.render(input);
+      expect(outputWithMissingRefs).to.not.equal(expectedEventually);
+
+      writeFileSync(`${__dirname}/fixtures/temp.bib`, sources.slice(0, 3).join('\n\n'));
+
+      const outputWithAllRefs = md.render(input);
+      expect(outputWithAllRefs).to.equal(expectedEventually);
+
+      unlinkSync(`${__dirname}/fixtures/temp.bib`);
+    });
+
     specify('append bibliography at the end of content if so configured', () => {
       md.use(mdBiblatex, {
         bibPath: `${__dirname}/fixtures/bibliography.bib`,
@@ -194,7 +239,7 @@ context('decouple parsing and rendering', () => {
     customizedMd.use(mdBiblatex, { bibPath: `${__dirname}/fixtures/bibliography.bib` });
 
     // Wrap our renderer in a custom render function with undefined bib
-    const renderer = md.renderer.rules.biblatex_reference;
+    const renderer = customizedMd.renderer.rules.biblatex_reference;
     customizedMd.renderer.rules.biblatex_reference = (tokens, idx, options, env, slf) =>
       renderer(tokens, idx, options, { ...env, bib: undefined }, slf);
 

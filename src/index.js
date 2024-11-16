@@ -17,6 +17,14 @@ const DEFAULT_OPTIONS = {
   // See: https://github.com/citation-style-language/styles
   stylePath: `${__dirname}/csl/apa-6th-edition.csl`,
 
+  // Reload bib, locale and styles on every render
+  // This could be a useful option when working with a live updating plugin,
+  // at the cost of performance
+  alwaysReloadFiles: false,
+
+  // Don't throw errors if references are missing
+  allowMissingRefs: false,
+
   // Which mark to use for suppress-author (don't show author)
   suppressAuthorMark: '-',
 
@@ -56,9 +64,8 @@ const DEFAULT_OPTIONS = {
 function mdBibLatexPlugin(md, _options) {
   const options = { ...DEFAULT_OPTIONS, ..._options };
 
-  const bibData = importBibLatex(options);
-  const citeproc = new CSL.Engine(bibData.sys, bibData.style);
-  const context = { options, bibData, citeproc };
+  const { bibData, citeproc } = loadFiles(options);
+  const context = { options, bibData, citeproc, loadFiles };
 
   const parse = parser(context);
   const render = renderer(context);
@@ -80,7 +87,7 @@ function mdBibLatexPlugin(md, _options) {
   md.renderer.rules.biblatex_bibliography_close = render.bibliographyClose;
 }
 
-function importBibLatex(options) {
+function loadFiles(options) {
   const { bibPath, stylePath, localePath } = options;
 
   if (bibPath === null) {
@@ -114,16 +121,21 @@ function importBibLatex(options) {
 
   const style = readFileSync(stylePath, 'utf-8');
   const locale = readFileSync(localePath, 'utf-8');
+  const sys = {
+    retrieveLocale: () => locale,
+    retrieveItem: (id) => cslResult[id],
+  };
+  const citeproc = new CSL.Engine(sys, style);
 
   return {
-    ids,
-    cslResult,
-    style,
-    locale,
-    sys: {
-      retrieveLocale: () => locale,
-      retrieveItem: (id) => cslResult[id],
+    bibData: {
+      ids,
+      cslResult,
+      style,
+      locale,
+      sys,
     },
+    citeproc,
   };
 }
 
