@@ -3,6 +3,7 @@ const { expect } = require('chai');
 const markdownIt = require('markdown-it');
 const { readFileSync, writeFileSync, unlinkSync } = require('fs');
 const mdBiblatex = require('../src');
+const mdBibLatexPlugin = require('../src');
 
 const md = markdownIt();
 
@@ -61,6 +62,17 @@ describe('markdown-it plug-in', () => {
       const output = md.render(input);
 
       const expected = fixture('comprehensive-nl-nl.html');
+      expect(output).to.equal(expected);
+    });
+
+    specify('passing bib contents directly', () => {
+      const bibContents = fixture('bibliography.bib');
+      md.use(mdBiblatex);
+      
+      const input = fixture('comprehensive.md');
+      const output = md.render(input, { bibContents });
+
+      const expected = fixture('comprehensive.html');
       expect(output).to.equal(expected);
     });
 
@@ -217,8 +229,12 @@ describe('markdown-it plug-in', () => {
   });
 
   context('configuration errors', () => {
-    specify('biblatex path not given', () => {
-      expect(() => md.use(mdBiblatex, { bibPath: null })).to.throw('bibPath');
+    specify('biblatex path not given and no biblatex contents are given during render', () => {
+      // This used to throw an error
+      expect(() => md.use(mdBiblatex, { bibPath: null })).to.not.throw('bibPath');
+
+      const input = fixture('comprehensive.md');
+      expect(() => md.render(input)).to.throw('bibtex contents');
     });
 
     specify('biblatex file not found', () => {

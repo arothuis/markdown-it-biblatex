@@ -6,6 +6,7 @@ function parser(context) {
     infixMark,
     bibliographyMark,
     alwaysReloadFiles,
+    bibPath,
   } = context.options;
 
   const marks = [suppressAuthorMark, authorOnlyMark, compositeMark]
@@ -17,8 +18,14 @@ function parser(context) {
     const { pos, posMax, src } = state;
 
     if (state.env.bib === undefined) {
-      if (alwaysReloadFiles === true) {
+      if (bibPath !== null && alwaysReloadFiles === true) {
         const { bibData, citeproc } = context.loadFiles(context.options);
+        context.bibData = bibData;
+        context.citeproc = citeproc;
+      }
+
+      if (bibPath === null) {
+        const { bibData, citeproc } = context.loadBibContents(state.env.bibContents, context.options);
         context.bibData = bibData;
         context.citeproc = citeproc;
       }
