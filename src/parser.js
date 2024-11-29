@@ -25,7 +25,10 @@ function parser(context) {
       }
 
       if (bibPath === null) {
-        const { bibData, citeproc } = context.loadBibContents(state.env.bibContents, context.options);
+        const { bibData, citeproc } = context.loadBibContents(
+          state.env.bibContents,
+          context.options
+        );
         context.bibData = bibData;
         context.citeproc = citeproc;
       }

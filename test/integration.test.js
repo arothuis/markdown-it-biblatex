@@ -3,7 +3,6 @@ const { expect } = require('chai');
 const markdownIt = require('markdown-it');
 const { readFileSync, writeFileSync, unlinkSync } = require('fs');
 const mdBiblatex = require('../src');
-const mdBibLatexPlugin = require('../src');
 
 const md = markdownIt();
 
@@ -68,7 +67,7 @@ describe('markdown-it plug-in', () => {
     specify('passing bib contents directly', () => {
       const bibContents = fixture('bibliography.bib');
       md.use(mdBiblatex);
-      
+
       const input = fixture('comprehensive.md');
       const output = md.render(input, { bibContents });
 
