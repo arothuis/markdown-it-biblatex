@@ -64,8 +64,12 @@ const DEFAULT_OPTIONS = {
 function mdBibLatexPlugin(md, _options) {
   const options = { ...DEFAULT_OPTIONS, ..._options };
 
-  const { bibData, citeproc } = loadFiles(options);
-  const context = { options, bibData, citeproc, loadFiles };
+  const context = { options, loadFiles, loadBibContents };
+  if (options.bibPath !== null) {
+    const { bibData, citeproc } = loadFiles(options);
+    context.bibData = bibData;
+    context.citeproc = citeproc;
+  }
 
   const parse = parser(context);
   const render = renderer(context);
@@ -88,26 +92,29 @@ function mdBibLatexPlugin(md, _options) {
 }
 
 function loadFiles(options) {
-  const { bibPath, stylePath, localePath } = options;
-
-  if (bibPath === null) {
-    throw new Error(
-      'Could not import biblatex bibliography:' +
-        " please supply 'bibPath' in the markdown-it-biblatex plugin's options" +
-        ' with the (relative) path to the .bib file to use.'
-    );
-  }
+  const { bibPath } = options;
 
   if (!existsSync(bibPath)) {
     throw new Error(`Could not import biblatex file: "${bibPath}" not found`);
   }
 
   const contents = readFileSync(bibPath, 'utf-8');
+
+  return loadBibContents(contents, options);
+}
+
+function loadBibContents(contents, options) {
+  const { stylePath, localePath } = options;
+
+  if (contents === null || contents === undefined) {
+    throw new Error('Cannot parse bibtex contents, none given');
+  }
+
   const bibResult = new BibLatexParser(contents).parse();
 
   if (bibResult.errors.length > 0) {
     throw new Error(
-      `Could not parse bibtex file, because of the following errors: \n${JSON.stringify(
+      `Could not parse bibtex contents, because of the following errors: \n${JSON.stringify(
         bibResult.errors
       )}`
     );
@@ -121,6 +128,7 @@ function loadFiles(options) {
 
   const style = readFileSync(stylePath, 'utf-8');
   const locale = readFileSync(localePath, 'utf-8');
+
   const sys = {
     retrieveLocale: () => locale,
     retrieveItem: (id) => cslResult[id],

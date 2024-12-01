@@ -64,6 +64,28 @@ describe('markdown-it plug-in', () => {
       expect(output).to.equal(expected);
     });
 
+    specify('passing bib contents directly without a bib path', () => {
+      const bibContents = fixture('bibliography.bib');
+      md.use(mdBiblatex);
+
+      const input = fixture('comprehensive.md');
+      const output = md.render(input, { bibContents });
+
+      const expected = fixture('comprehensive.html');
+      expect(output).to.equal(expected);
+    });
+
+    specify('passing bib contents directly takes priority over a bib path', () => {
+      const bibContents = fixture('bibliography.bib');
+      md.use(mdBiblatex, { bibPath: `${__dirname}/fixtures/empty.bib` });
+
+      const input = fixture('comprehensive.md');
+      const output = md.render(input, { bibContents });
+
+      const expected = fixture('comprehensive.html');
+      expect(output).to.equal(expected);
+    });
+
     specify('custom marks for modes: composite, suppress-author, author-only', () => {
       md.use(mdBiblatex, {
         bibPath: `${__dirname}/fixtures/bibliography.bib`,
@@ -217,8 +239,12 @@ describe('markdown-it plug-in', () => {
   });
 
   context('configuration errors', () => {
-    specify('biblatex path not given', () => {
-      expect(() => md.use(mdBiblatex, { bibPath: null })).to.throw('bibPath');
+    specify('biblatex path not given and no biblatex contents are given during render', () => {
+      // This used to throw an error
+      expect(() => md.use(mdBiblatex, { bibPath: null })).to.not.throw('bibPath');
+
+      const input = fixture('comprehensive.md');
+      expect(() => md.render(input)).to.throw('bibtex contents');
     });
 
     specify('biblatex file not found', () => {

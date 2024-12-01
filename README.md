@@ -341,6 +341,20 @@ Only `bibPath` is required.
 };
 ```
 
+## Passing bibliography contents directly
+Biblatex bibliography contents can be passed directly to the render
+function by setting it in the `env` (`bibContents`) when calling `md.render`:
+
+```
+// Note that no bibPath is configured
+md.use(mdBiblatex);
+md.render(myContentString, { bibContents: myBibContentString });
+```
+
+When a `bibPath` is given as configuration, it will always be fully 
+overwritten by `bibContents` passed to the render function.
+
+
 ## Custom rendering
 
 If you want more extensive control over how the output is rendered,
