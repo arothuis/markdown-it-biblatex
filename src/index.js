@@ -9,9 +9,6 @@ const DEFAULT_OPTIONS = {
   // Where to find the biblatex file (.bib)
   bibPath: null,
 
-  // Instead of using a biblatex file, we can use bib contents directly
-  bibContents: null,
-
   // Change locale for displaying references and bibliography (.xml)
   // See: https://github.com/citation-style-language/locales
   localePath: `${__dirname}/csl/locales-en-US.xml`,
