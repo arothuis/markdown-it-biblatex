@@ -64,9 +64,20 @@ describe('markdown-it plug-in', () => {
       expect(output).to.equal(expected);
     });
 
-    specify('passing bib contents directly', () => {
+    specify('passing bib contents directly without a bib path', () => {
       const bibContents = fixture('bibliography.bib');
       md.use(mdBiblatex);
+
+      const input = fixture('comprehensive.md');
+      const output = md.render(input, { bibContents });
+
+      const expected = fixture('comprehensive.html');
+      expect(output).to.equal(expected);
+    });
+
+    specify('passing bib contents directly takes priority over a bib path', () => {
+      const bibContents = fixture('bibliography.bib');
+      md.use(mdBiblatex, { bibPath: `${__dirname}/fixtures/empty.bib` });
 
       const input = fixture('comprehensive.md');
       const output = md.render(input, { bibContents });

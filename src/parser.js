@@ -24,7 +24,8 @@ function parser(context) {
         context.citeproc = citeproc;
       }
 
-      if (bibPath === null) {
+      // Override configured bib file with bibContents passed as environment
+      if (state.env.bibContents || !bibPath) {
         const { bibData, citeproc } = context.loadBibContents(
           state.env.bibContents,
           context.options
